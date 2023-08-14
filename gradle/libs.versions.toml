@@ -1,0 +1,85 @@
+[versions]
+kotlin = "1.8.10"
+core-ktx = "1.10.1"
+lifeCycle = "2.6.1"
+compose-activity = "1.7.2"
+compose-bom = "2023.03.00"
+junit = "4.13.2"
+junit-ext = "1.1.5"
+espresso = "3.5.1"
+coroutine = "1.7.3"
+hilt = "2.47"
+hilt-nav = "1.0.0"
+retrofit = "2.9.0"
+okhttp = "4.11.0"
+coil = "2.4.0"
+junit-jupiter = "5.10.0"
+mockito-junit-jupiter = "5.4.0"
+compose-nav = "2.6.0"
+accompanist-system-bar = "0.30.1"
+room-version = "2.5.2"
+datastore = "1.0.0"
+
+[libraries]
+
+core-ktx = {group = "androidx.core", name = "core-ktx", version.ref = "core-ktx"}
+lifecycle-runtime-ktx = {group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifeCycle"}
+
+compose-activity = {group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity"}
+compose-bom = {group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom"}
+compose-ui = {group = "androidx.compose.ui", name = "ui"}
+compose-ui-graphic = {group = "androidx.compose.ui", name = "ui-graphics"}
+compose-ui-tooling-preview = {group = "androidx.compose.ui", name = "ui-tooling-preview"}
+compose-material3 = {group = "androidx.compose.material3", name = "material3"}
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-nav" }
+
+## testImplementation
+junit = {group = "junit", name = "junit", version.ref = "junit"}
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito-junit-jupiter" }
+## androidTestImplementation
+junit-ext = {group = "androidx.test.ext", name = "junit", version.ref = "junit-ext"}
+espresso-core = {group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso"}
+## androidTestImplementation - Platform compose bom androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+junit-ui-test = {group = "androidx.compose.ui", name = "ui-test-junit4"}
+## debugImplementation
+compose-ui-tooling = {group = "androidx.compose.ui", name = "ui-tooling"}
+compose-ui-test-manifest = {group = "androidx.compose.ui", name = "ui-test-manifest"}
+
+kotlin-coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutine" }
+kotlin-coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
+kotlin-coroutine-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutine" }
+
+lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifeCycle" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifeCycle" }
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifeCycle" }
+
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
+## Use ksp or Kapt
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt"}
+hilt-nav = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-nav"}
+hilt-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt"}
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+accompanist-system-bar = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist-system-bar" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
+
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+[plugins]
+
+kapt = { id = "org.jetbrains.kotlin.kapt", version = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version = "hilt" }
+
+
+
+
+
