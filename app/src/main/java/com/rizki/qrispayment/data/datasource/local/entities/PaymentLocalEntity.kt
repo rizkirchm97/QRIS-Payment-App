@@ -10,7 +10,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "PaymentDetail")
 data class PaymentLocalEntity(
     @PrimaryKey(autoGenerate = false)
-    val idTransaction: String,
-    val merchantName: String,
-    val bankSource: String,
+    val id: String,
+    val idTransaction: String?,
+    val bankId: String?,
+    val merchantName: String?,
+    val bankSource: String?,
+    val totalAmount: Long?,
 )

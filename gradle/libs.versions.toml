@@ -19,6 +19,8 @@ compose-nav = "2.6.0"
 accompanist-system-bar = "0.30.1"
 room-version = "2.5.2"
 datastore = "1.0.0"
+camera-version = "1.2.1"
+zxing = "3.5.2"
 
 [libraries]
 
@@ -73,6 +75,12 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-ver
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
 
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camera-version" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera-version" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera-version" }
+
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
 [plugins]
 
