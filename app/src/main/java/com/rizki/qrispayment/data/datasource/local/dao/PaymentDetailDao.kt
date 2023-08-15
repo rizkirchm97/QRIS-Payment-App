@@ -3,6 +3,7 @@ package com.rizki.qrispayment.data.datasource.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.rizki.qrispayment.data.datasource.local.entities.PaymentLocalEntity
 import kotlinx.coroutines.flow.Flow
@@ -13,18 +14,20 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PaymentDetailDao {
+    @Transaction
     @Upsert
     suspend fun upsert(paymentLocalEntity: PaymentLocalEntity)
 
+    @Transaction
     @Insert
     suspend fun insert(paymentLocalEntity: PaymentLocalEntity)
 
     @Query("SELECT * FROM PaymentDetail WHERE idTransaction = :idTransaction")
-    suspend fun getPaymentDetail(idTransaction: String): Flow<PaymentLocalEntity>
+    fun getPaymentDetail(idTransaction: String): Flow<PaymentLocalEntity>
 
     @Query("DELETE FROM PaymentDetail")
     suspend fun clearPaymentDetail()
 
     @Query("SELECT * FROM PaymentDetail")
-    suspend fun getAllPaymentDetail(): Flow<List<PaymentLocalEntity>>
+    fun getAllPaymentDetail(): Flow<List<PaymentLocalEntity>>
 }

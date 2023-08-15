@@ -12,6 +12,7 @@ interface LocalDataSource {
     suspend fun saveToPaymentDb(paymentLocalEntity: PaymentLocalEntity): Flow<Resource<Unit>>
     suspend fun saveToBankDepositDb(bankDepositLocalEntity: BankDepositLocalEntity): Flow<Resource<Unit>>
     suspend fun getPaymentDetailById(idTransaction: String): Flow<Resource<PaymentLocalEntity>>
+    suspend fun getBankDepositDetail(): Flow<Resource<BankDepositLocalEntity>>
     suspend fun clearPaymentDetail(): Flow<Resource<Unit>>
     suspend fun clearBankDeposit(): Flow<Resource<Unit>>
     suspend fun getAllPaymentDetail(): Flow<Resource<List<PaymentLocalEntity>>>

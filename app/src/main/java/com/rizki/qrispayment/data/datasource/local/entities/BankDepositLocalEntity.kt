@@ -1,6 +1,7 @@
 package com.rizki.qrispayment.data.datasource.local.entities
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * created by RIZKI RACHMANUDIN on 14/08/2023
@@ -12,7 +13,7 @@ import androidx.room.Entity
 
 @Entity(tableName = "BankDeposit")
 data class BankDepositLocalEntity(
-    val idTransaction: String,
-    val nominalMoney: Int = 500_000_000,
-    val isToggleDeposit: Boolean = false
+    @PrimaryKey(autoGenerate = false)
+    val bankId: String = "BNI1234",
+    val nominalMoney: Long? = 500_000_000,
 )
