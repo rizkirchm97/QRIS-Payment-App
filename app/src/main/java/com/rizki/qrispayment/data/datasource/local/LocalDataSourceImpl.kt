@@ -65,7 +65,15 @@ class LocalDataSourceImpl @Inject constructor(
         }
 
     override suspend fun getBankDepositDetail(): Flow<Resource<BankDepositLocalEntity>> = flow {
-
+        emit(Resource.Loading())
+        val bankDepositDetail = db.bankDepositDao.getLatestBankDeposit()
+        bankDepositDetail
+            .catch { e ->
+                emit(Resource.Error(e.message.toString()))
+            }
+            .collect { result ->
+                emit(Resource.Success(result))
+            }
     }
 
     override suspend fun clearPaymentDetail(): Flow<Resource<Unit>> = flow {

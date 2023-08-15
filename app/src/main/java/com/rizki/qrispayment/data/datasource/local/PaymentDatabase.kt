@@ -15,7 +15,7 @@ import com.rizki.qrispayment.data.datasource.local.entities.PaymentLocalEntity
     entities = [
         PaymentLocalEntity::class,
         BankDepositLocalEntity::class
-    ], version = 1
+    ], version = 2
 )
 abstract class PaymentDatabase : RoomDatabase() {
     abstract val paymentDao: PaymentDetailDao

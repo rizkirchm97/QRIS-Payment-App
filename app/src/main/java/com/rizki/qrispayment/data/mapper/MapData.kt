@@ -14,6 +14,12 @@ fun PaymentDetailEntity.mapToData() = PaymentLocalEntity(
     totalAmount = totalAmount
 )
 
+
+fun BankDepositDetailEntity.mapToData() = BankDepositLocalEntity(
+    bankId = bankId,
+    nominalMoney = nominalMoney
+)
+
 fun PaymentLocalEntity.mapToDomain() = PaymentDetailEntity(
     id = id,
     idTransaction = idTransaction ?: "",
@@ -23,10 +29,7 @@ fun PaymentLocalEntity.mapToDomain() = PaymentDetailEntity(
     totalAmount = totalAmount ?: 0
 )
 
-fun BankDepositDetailEntity.mapToData() = BankDepositLocalEntity(
-    bankId = bankId,
-    nominalMoney = nominalMoney
-)
+
 
 fun BankDepositLocalEntity.mapToDomain() = BankDepositDetailEntity(
     bankId = bankId ?: "",
