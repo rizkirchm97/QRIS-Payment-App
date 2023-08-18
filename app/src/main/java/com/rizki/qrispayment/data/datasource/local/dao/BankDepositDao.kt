@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
+import com.rizki.qrispayment.common.utils.Resource
 import com.rizki.qrispayment.data.datasource.local.entities.BankDepositLocalEntity
 import kotlinx.coroutines.flow.Flow
 

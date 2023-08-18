@@ -12,7 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.rizki.qrispayment.common.AppNav
 import com.rizki.qrispayment.common.components.QRCamera
+import com.rizki.qrispayment.features.home.HomePaymentScreen
 import com.rizki.qrispayment.ui.theme.QRISPaymentTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,22 +26,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             QRISPaymentTheme {
                 // A surface container using the 'background' color from the theme
+                val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    QRCamera(
-                        onSuccess = {
-                            LaunchedEffect(key1 = it) {
-                                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                        onError = {
-                            LaunchedEffect(key1 = it) {
-                                Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    )
+                    AppNav(navController = navController)
                 }
             }
         }

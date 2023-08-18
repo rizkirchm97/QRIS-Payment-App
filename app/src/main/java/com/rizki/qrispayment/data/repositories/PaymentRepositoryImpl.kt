@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -23,7 +24,7 @@ class PaymentRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : PaymentRepository {
     override suspend fun savePayment(
-        paymentDetailEntity: PaymentDetailEntity, bankDepositDetailEntity: BankDepositDetailEntity
+        paymentDetailEntity: PaymentDetailEntity
     ): Flow<Resource<Unit>> = flow {
 
         val getNominal = localDataSource.getBankDepositDetail()
@@ -31,65 +32,87 @@ class PaymentRepositoryImpl @Inject constructor(
             .catch { e ->
                 emit(Resource.Error(e.message.toString())) }
             .collect { bankData ->
-            when (bankData) {
-                is Resource.Success -> {
-                    if (bankData.data != null) {
-                        val nominalDeposit = bankData.data.nominalMoney
-                        val totalDeposit = nominalDeposit?.minus(paymentDetailEntity.totalAmount)
-                        val bankDeposit = BankDepositDetailEntity(
-                            bankId = bankData.data.bankId,
-                            nominalMoney = totalDeposit,
-                        )
-                        val flowBank = localDataSource.saveToBankDepositDb(bankDeposit.mapToData())
+                when (bankData) {
+                    is Resource.Success -> {
+                        if (bankData.data != null) {
+                            if (bankData.data.nominalMoney!! < paymentDetailEntity.totalAmount!!) {
+                                emit(Resource.Error("Saldo anda tidak cukup"))
+                            } else {
+                                val nominalDeposit = bankData.data.nominalMoney
+                                val totalDeposit = nominalDeposit.minus(paymentDetailEntity.totalAmount)
+                                val bankDeposit = BankDepositDetailEntity(
+                                    bankId = bankData.data.bankId,
+                                    nominalMoney = totalDeposit,
+                                )
+                                val flowBank = localDataSource.saveToBankDepositDb(bankDeposit.mapToData())
 
-                        val flowPayment =  localDataSource.saveToPaymentDb(paymentDetailEntity.mapToData())
+                                val flowPayment =  localDataSource.saveToPaymentDb(paymentDetailEntity.mapToData())
 
-                        flowBank
-                            .catch { e ->
-                                emit(Resource.Error(e.message.toString()))
+                                println(flowPayment.toString())
+
+                                flowBank
+                                    .catch { e ->
+                                        emit(Resource.Error(e.message.toString()))
+                                    }
+                                    .combine(flowPayment)
+                                    { bank, payment ->
+
+                                        when {
+                                            bank is Resource.Success && payment is Resource.Success -> {
+                                                emit(Resource.Success(Unit))
+                                            }
+                                            bank is Resource.Error && payment is Resource.Error -> {
+                                                emit(Resource.Error("Error when save to db"))
+                                            }
+                                            bank is Resource.Loading && payment is Resource.Loading -> {
+                                                emit(Resource.Loading())
+                                            }
+                                        }
+
+                                    }
                             }
-                            .combine(flowPayment)
-                            { bank, payment ->
 
-                            when {
-                                bank is Resource.Success && payment is Resource.Success -> {
-                                    emit(Resource.Success(Unit))
-                                }
-                                bank is Resource.Error || payment is Resource.Error -> {
-                                    emit(Resource.Error("Error when save to db"))
-                                }
-                                bank is Resource.Loading || payment is Resource.Loading -> {
-                                    emit(Resource.Loading())
+
+                        } else {
+                            val bankDepositDetailEntity = BankDepositDetailEntity(
+                                bankId = "BNI64",
+                                nominalMoney = 2500000
+                            )
+                            val flowBank = localDataSource.saveToBankDepositDb(bankDepositDetailEntity.mapToData())
+                            val flowPayment = localDataSource.saveToPaymentDb(paymentDetailEntity.mapToData())
+
+                            flowBank.combine(flowPayment) { bank, payment ->
+
+                                when {
+                                    bank is Resource.Success && payment is Resource.Success -> {
+                                        emit(Resource.Success(Unit))
+                                    }
+                                    bank is Resource.Error && payment is Resource.Error -> {
+                                        emit(Resource.Error("Error when save to db"))
+                                    }
+                                    bank is Resource.Loading && payment is Resource.Loading -> {
+                                        emit(Resource.Loading())
+                                    }
                                 }
                             }
 
                         }
 
-                    } else {
-                        val flowBank = localDataSource.saveToBankDepositDb(bankDepositDetailEntity.mapToData())
-                        flowBank.collect {result ->
-                            if (result is Resource.Success) {
-
-                            }
-
-                        }
                     }
 
-                }
+                    is Resource.Error -> {
+                        emit(Resource.Error(bankData.message + " When get nominal deposit"))
+                    }
 
-                is Resource.Error -> {
-                    emit(Resource.Error(bankData.message + " When get nominal deposit"))
-                }
+                    is Resource.Loading -> {
+                        emit(Resource.Loading())
+                    }
 
-                is Resource.Loading -> {
-                    emit(Resource.Loading())
+
                 }
 
 
             }
-
-
-        }
 
 
     }
@@ -102,24 +125,26 @@ class PaymentRepositoryImpl @Inject constructor(
                 .catch { e ->
                     emit(Resource.Error(e.message.toString())) }
                 .collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        if (result.data != null) {
-                            emit(Resource.Success(result.data.mapToDomain()))
+                    when (result) {
+                        is Resource.Success -> {
+                            if (result.data != null) {
+                                emit(Resource.Success(result.data.mapToDomain()))
+                            }
                         }
-                    }
 
-                    is Resource.Error -> {
-                        emit(Resource.Error(result.message))
-                    }
+                        is Resource.Error -> {
+                            emit(Resource.Error(result.message))
+                        }
 
-                    is Resource.Loading -> {
-                        emit(Resource.Loading())
+                        is Resource.Loading -> {
+                            emit(Resource.Loading())
+                        }
+
+                        else -> Unit
+
                     }
 
                 }
-
-            }
         }
 
     override suspend fun clearPaymentDetail(): Flow<Resource<Unit>> =
@@ -132,24 +157,26 @@ class PaymentRepositoryImpl @Inject constructor(
             .catch { e ->
                 emit(Resource.Error(e.message.toString())) }
             .collect { result ->
-            when (result) {
-                is Resource.Success -> {
-                    if (result.data != null) {
-                        emit(Resource.Success(result.data.map { it.mapToDomain() }))
+                when (result) {
+                    is Resource.Success -> {
+                        if (result.data != null) {
+                            emit(Resource.Success(result.data.map { it.mapToDomain() }))
+                        }
                     }
-                }
 
-                is Resource.Error -> {
-                    emit(Resource.Error(result.message))
-                }
+                    is Resource.Error -> {
+                        emit(Resource.Error(result.message))
+                    }
 
-                is Resource.Loading -> {
-                    emit(Resource.Loading())
+                    is Resource.Loading -> {
+                        emit(Resource.Loading())
+                    }
+
+                    else -> Unit
+
                 }
 
             }
-
-        }
     }
 
     override suspend fun getLatestBankDeposit(): Flow<Resource<BankDepositDetailEntity>> = flow {
@@ -159,24 +186,42 @@ class PaymentRepositoryImpl @Inject constructor(
             .catch { e ->
                 emit(Resource.Error(e.message.toString())) }
             .collect { result ->
-            when (result) {
-                is Resource.Success -> {
-                    if (result.data != null) {
-                        emit(Resource.Success(result.data.mapToDomain()))
+
+                when (result) {
+                    is Resource.Success -> {
+                        if (result.data != null) {
+                            emit(Resource.Success(result.data.mapToDomain()))
+                        } else {
+                            localDataSource.saveToBankDepositDb(BankDepositDetailEntity("BNI64", 100_000_000).mapToData()).collect { upsert ->
+                                when (upsert) {
+                                    is Resource.Success -> {
+                                        emit(Resource.Success(BankDepositDetailEntity("BNI64", 100_000_000)))
+                                    }
+                                    is Resource.Error -> {
+                                        emit(Resource.Error(upsert.message))
+                                    }
+                                    is Resource.Loading -> {
+                                        emit(Resource.Loading())
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
 
-                is Resource.Error -> {
-                    emit(Resource.Error(result.message))
-                }
+                    is Resource.Error -> {
 
-                is Resource.Loading -> {
-                    emit(Resource.Loading())
+                        emit(Resource.Error(result.message))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading())
+                    }
+
+                    else -> Unit
+
                 }
 
             }
-
-        }
     }
 
 

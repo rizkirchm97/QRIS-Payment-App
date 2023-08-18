@@ -5,9 +5,9 @@ package com.rizki.qrispayment.domain.entities
  */
 data class PaymentDetailEntity(
     val id: String,
-    val idTransaction: String,
-    val bankId: String,
-    val merchantName: String,
-    val bankSource: String,
-    val totalAmount: Long,
+    val idTransaction: String?,
+    val bankId: String?,
+    val merchantName: String?,
+    val bankSource: String?,
+    val totalAmount: Long?,
 )

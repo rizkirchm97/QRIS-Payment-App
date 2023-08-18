@@ -45,22 +45,19 @@ class SavePaymentUsaCaseTest {
         // Arrange
         Mockito.lenient().`when`(
             paymentRepository.savePayment(
-                paymentDetailEntity = paymentExpected,
-                bankDepositDetailEntity = bankExpected
+                paymentDetailEntity = paymentExpected
             )
         ).thenReturn(flowOf(Resource.Success(Unit)))
 
         // Act
         val result = savePaymentUsaCase.invoke(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected
+            paymentDetailEntity = paymentExpected
         ).first()
 
         // Assert
         assert(result is Resource.Success)
         Mockito.verify(paymentRepository).savePayment(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected)
+            paymentDetailEntity = paymentExpected)
 
 
     }
@@ -74,23 +71,20 @@ class SavePaymentUsaCaseTest {
         // Arrange
         Mockito.lenient().`when`(
             paymentRepository.savePayment(
-                paymentDetailEntity = paymentExpected,
-                bankDepositDetailEntity = bankExpected
+                paymentDetailEntity = paymentExpected
             )
         ).thenReturn(flowOf(Resource.Error(expected)))
 
         // Act
         val result = savePaymentUsaCase.invoke(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected
+            paymentDetailEntity = paymentExpected
         ).first()
 
         // Assert
         assertEquals(expected, result.message)
         assert(result is Resource.Error)
         Mockito.verify(paymentRepository).savePayment(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected)
+            paymentDetailEntity = paymentExpected)
 
     }
 
@@ -101,22 +95,19 @@ class SavePaymentUsaCaseTest {
         // Arrange
         Mockito.lenient().`when`(
             paymentRepository.savePayment(
-                paymentDetailEntity = paymentExpected,
-                bankDepositDetailEntity = bankExpected
+                paymentDetailEntity = paymentExpected
             )
         ).thenReturn(flowOf(Resource.Loading()))
 
         // Act
         val result = savePaymentUsaCase.invoke(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected
+            paymentDetailEntity = paymentExpected
         ).first()
 
         // Assert
         assert(result is Resource.Loading)
         Mockito.verify(paymentRepository).savePayment(
-            paymentDetailEntity = paymentExpected,
-            bankDepositDetailEntity = bankExpected)
+            paymentDetailEntity = paymentExpected)
 
     }
 
@@ -127,8 +118,7 @@ class SavePaymentUsaCaseTest {
 
         val expected = org.junit.jupiter.api.assertThrows<IllegalArgumentException>() {
             savePaymentUsaCase.invoke(
-                paymentDetailEntity = paymentExpected.copy(" ", " "),
-                bankDepositDetailEntity = bankExpected.copy(" ", 1_000_000)
+                paymentDetailEntity = paymentExpected.copy(" ", " ")
             )
             throw IllegalArgumentException("All contained parameter should not be null or empty")
         }

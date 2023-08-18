@@ -14,6 +14,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "BankDeposit")
 data class BankDepositLocalEntity(
     @PrimaryKey(autoGenerate = false)
-    val bankId: String = "BNI1234",
-    val nominalMoney: Long? = 500_000_000,
+    val bankId: String,
+    val nominalMoney: Long?,
 )

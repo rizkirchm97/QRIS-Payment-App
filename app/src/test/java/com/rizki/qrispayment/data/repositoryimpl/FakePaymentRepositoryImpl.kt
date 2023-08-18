@@ -23,8 +23,7 @@ class FakePaymentRepositoryImpl @Inject constructor(
 
 
     override suspend fun savePayment(
-        paymentDetailEntity: PaymentDetailEntity,
-        bankDepositDetailEntity: BankDepositDetailEntity
+        paymentDetailEntity: PaymentDetailEntity
     ): Flow<Resource<Unit>> = flow {
 
         val getNominal = localDataSource.getBankDepositDetail()
@@ -36,7 +35,7 @@ class FakePaymentRepositoryImpl @Inject constructor(
                     is Resource.Success -> {
                         if (bankData.data != null) {
                             val nominalDeposit = bankData.data!!.nominalMoney
-                            val totalDeposit = nominalDeposit?.minus(paymentDetailEntity.totalAmount)
+                            val totalDeposit = nominalDeposit?.minus(paymentDetailEntity.totalAmount!!)
                             val bankDeposit = BankDepositDetailEntity(
                                 bankId = bankData.data!!.bankId,
                                 nominalMoney = totalDeposit,
@@ -44,6 +43,8 @@ class FakePaymentRepositoryImpl @Inject constructor(
                             val flowBank = localDataSource.saveToBankDepositDb(bankDeposit.mapToData())
 
                             val flowPayment =  localDataSource.saveToPaymentDb(paymentDetailEntity.mapToData())
+
+                            println(flowPayment.toString())
 
                             flowBank
                                 .catch { e ->
@@ -67,6 +68,10 @@ class FakePaymentRepositoryImpl @Inject constructor(
                                 }
 
                         } else {
+                            val bankDepositDetailEntity = BankDepositDetailEntity(
+                                bankId = "BNI64",
+                                nominalMoney = 2500000
+                            )
                             val flowBank = localDataSource.saveToBankDepositDb(bankDepositDetailEntity.mapToData())
                             val flowPayment = localDataSource.saveToPaymentDb(paymentDetailEntity.mapToData())
 
