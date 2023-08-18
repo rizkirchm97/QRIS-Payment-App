@@ -1,7 +1,9 @@
 package com.rizki.qrispayment.features.scan_qr
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rizki.qrispayment.common.getCombineBNIUUID
 import com.rizki.qrispayment.common.splitQrCode
 import com.rizki.qrispayment.common.utils.Resource
 import com.rizki.qrispayment.domain.entities.PaymentDetailEntity
@@ -13,7 +15,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.UUID
 import javax.inject.Inject
 
@@ -21,6 +25,8 @@ import javax.inject.Inject
 class ScanQrViewModel @Inject constructor(
     private val useCase: SavePaymentUseCase
 ) : ViewModel() {
+
+
 
     private val _viewModelState = MutableStateFlow<ScanQrViewModelState>(ScanQrViewModelState(isLoading = true))
     val uiState = _viewModelState
@@ -39,34 +45,42 @@ class ScanQrViewModel @Inject constructor(
         }
     }
 
-    private fun savePayment(paymentDetail: String): Flow<ScanQrState> = flow {
+    private fun savePayment(paymentDetail: String) {
         viewModelScope.launch {
-            val qrCOdeDetail = paymentDetail.splitQrCode()
-            val paymentDetailEntity = PaymentDetailEntity(
-                id = UUID.randomUUID().toString(),
-                bankSource = qrCOdeDetail[0],
-                idTransaction = qrCOdeDetail[1],
-                merchantName = qrCOdeDetail[2],
-                totalAmount = qrCOdeDetail[3].toLong(),
-                bankId = "BNI64"
-            )
-            useCase.invoke(paymentDetailEntity).collect { result ->
+
+            useCase.invoke(paymentDetail).collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        emit(ScanQrState.Success(result.data))
+                        _viewModelState.update {
+                            it.copy(
+                                isLoading = false,
+                                success = result.data
+                            )
+                        }
                     }
 
                     is Resource.Error -> {
-                        emit(ScanQrState.Error(result.message))
+                        _viewModelState.update {
+                            it.copy(
+                                isLoading = false,
+                                isError = true,
+                                message = result.message
+                            )
+                        }
                     }
 
                     is Resource.Loading -> {
-                        emit(ScanQrState.Loading(result.isLoading))
+                        _viewModelState.update {
+                            it.copy(
+                                isLoading = true
+                            )
+                        }
                     }
                 }
             }
         }
     }
+
 
 
 }

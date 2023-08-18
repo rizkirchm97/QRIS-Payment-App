@@ -14,9 +14,9 @@ class SavePaymentUseCase @Inject constructor(
     private val paymentRepository: PaymentRepository
 ) {
     suspend operator fun invoke(
-        paymentDetailEntity: PaymentDetailEntity
+        paymentDetail: String?
     ): Flow<Resource<Unit>> = paymentRepository.savePayment(
-            paymentDetailEntity = paymentDetailEntity
+            paymentDetail = paymentDetail
         )
 
 

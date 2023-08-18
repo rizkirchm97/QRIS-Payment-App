@@ -4,6 +4,7 @@ import java.nio.ByteBuffer
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
+import java.util.UUID
 
 fun ByteBuffer.toByteArray(): ByteArray {
     rewind()
@@ -22,4 +23,9 @@ fun Long.toCurrencyIDRFormat(): String {
     val number = this
     val format = formatter.format(number)
     return "Rp$format"
+}
+
+fun getCombineBNIUUID(): String {
+    val random = UUID.randomUUID().toString()
+    return "BNI${random.take(6)}"
 }

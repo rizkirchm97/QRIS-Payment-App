@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
  * created by RIZKI RACHMANUDIN on 14/08/2023
  */
 interface PaymentRepository {
-    suspend fun savePayment(paymentDetailEntity: PaymentDetailEntity): Flow<Resource<Unit>>
+    suspend fun savePayment(paymentDetail: String?): Flow<Resource<Unit>>
     suspend fun getPaymentDetailById(idTransaction: String): Flow<Resource<PaymentDetailEntity>>
     suspend fun clearPaymentDetail(): Flow<Resource<Unit>>
     suspend fun getAllPaymentDetail(): Flow<Resource<List<PaymentDetailEntity>>>
