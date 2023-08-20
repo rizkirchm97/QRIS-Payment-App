@@ -1,24 +1,18 @@
 package com.rizki.qrispayment.features.scan_qr
 
-import androidx.lifecycle.SavedStateHandle
+
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rizki.qrispayment.common.getCombineBNIUUID
-import com.rizki.qrispayment.common.splitQrCode
 import com.rizki.qrispayment.common.utils.Resource
-import com.rizki.qrispayment.domain.entities.PaymentDetailEntity
 import com.rizki.qrispayment.domain.usecases.SavePaymentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.VisibleForTesting
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +34,7 @@ class ScanQrViewModel @Inject constructor(
     fun onEvent(event: ScanQREvent) {
         when (event) {
             is ScanQREvent.SavePayment -> {
+                Log.e("ScanQRValue", "scannedValueViewModel: ${event.paymentDetail}")
                 savePayment(event.paymentDetail)
             }
         }
@@ -87,7 +82,7 @@ class ScanQrViewModel @Inject constructor(
 
 private data class ScanQrViewModelState(
     val isLoading: Boolean = false,
-    val success: Unit? = Unit,
+    val success: String? = "",
     val isError: Boolean? = false,
     val message: String? = null
 ) {
@@ -107,6 +102,6 @@ sealed interface ScanQREvent{
 
 sealed interface ScanQrState {
     data class Loading(val isLoading: Boolean?) : ScanQrState
-    data class Success(val data: Unit?) : ScanQrState
+    data class Success(val data: String?) : ScanQrState
     data class Error(val message: String?) : ScanQrState
 }

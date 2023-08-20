@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.rizki.qrispayment.features.home.navigation.homeNavigation
-import com.rizki.qrispayment.features.home.navigation.navigateToPaymentHistory
 import com.rizki.qrispayment.features.home.navigation.navigateToQrScan
+import com.rizki.qrispayment.features.scan_qr.navigation.scanQrNavigation
 
 @Composable
 fun AppNav(
@@ -17,7 +17,16 @@ fun AppNav(
                 navController.navigateToQrScan()
             },
             onTapPaymentHistory = {
-                navController.navigateToPaymentHistory()
+
+            }
+        )
+
+        scanQrNavigation(
+            onPopBack = {
+                navController.popBackStack()
+            },
+            onNavigateToPayment = { scannedValue ->
+
             }
         )
     }

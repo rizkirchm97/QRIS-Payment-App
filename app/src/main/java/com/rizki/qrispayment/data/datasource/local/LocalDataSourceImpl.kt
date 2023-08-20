@@ -22,29 +22,34 @@ class LocalDataSourceImpl @Inject constructor(
     private val db: PaymentDatabase,
 ) : LocalDataSource {
 
-    override suspend fun saveToPaymentDb(paymentLocalEntity: PaymentLocalEntity): Flow<Resource<Unit>> =
+    override suspend fun saveToPaymentDb(paymentLocalEntity: PaymentLocalEntity): Flow<Resource<String>> =
         flow {
-            emit(Resource.Loading())
 
-            db.paymentDao.insert(paymentLocalEntity)
-            emit(Resource.Success(Unit))
+            try {
+                db.paymentDao.insert(paymentLocalEntity)
+                emit(Resource.Success(paymentLocalEntity.id))
+            }catch (e: Exception){
+                emit(Resource.Error(e.message.toString()))
+            }
 
-        }.flowOn(Dispatchers.IO)
+
+        }
 
     override suspend fun saveToBankDepositDb(bankDepositLocalEntity: BankDepositLocalEntity): Flow<Resource<Unit>> =
         flow {
-            emit(Resource.Loading())
+
+            try {
+                db.bankDepositDao.upsert(bankDepositLocalEntity)
+                emit(Resource.Success(Unit))
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message.toString()))
+            }
 
 
-            db.bankDepositDao.upsert(bankDepositLocalEntity)
-            emit(Resource.Success(Unit))
-
-
-        }.flowOn(Dispatchers.IO)
+        }
 
     override suspend fun getPaymentDetailById(idTransaction: String): Flow<Resource<PaymentLocalEntity>> =
         flow {
-            emit(Resource.Loading())
 
             val paymentDetail = db.paymentDao.getPaymentDetail(idTransaction)
             paymentDetail
@@ -61,7 +66,6 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun getBankDepositDetail(): Flow<Resource<BankDepositLocalEntity>> =
         flow {
-            emit(Resource.Loading())
             val bankDepositDetail = db.bankDepositDao.getLatestBankDeposit()
             bankDepositDetail
                 .catch { e ->
@@ -73,27 +77,32 @@ class LocalDataSourceImpl @Inject constructor(
         }
 
     override suspend fun clearPaymentDetail(): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
 
-
-        db.paymentDao.clearPaymentDetail()
-        emit(Resource.Success(Unit))
+        try {
+            db.paymentDao.clearPaymentDetail()
+            emit(Resource.Success(Unit))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
 
 
     }.flowOn(Dispatchers.IO)
 
     override suspend fun clearBankDeposit(): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
 
 
-        db.bankDepositDao.delete()
-        emit(Resource.Success(Unit))
+        try {
+            db.bankDepositDao.delete()
+            emit(Resource.Success(Unit))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
 
 
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getAllPaymentDetail(): Flow<Resource<List<PaymentLocalEntity>>> = flow {
-        emit(Resource.Loading())
+
         val paymentDetail = db.paymentDao.getAllPaymentDetail()
         paymentDetail
             .catch { e ->

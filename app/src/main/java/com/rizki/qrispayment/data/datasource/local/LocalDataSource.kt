@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
  * created by RIZKI RACHMANUDIN on 14/08/2023
  */
 interface LocalDataSource {
-    suspend fun saveToPaymentDb(paymentLocalEntity: PaymentLocalEntity): Flow<Resource<Unit>>
+    suspend fun saveToPaymentDb(paymentLocalEntity: PaymentLocalEntity): Flow<Resource<String>>
     suspend fun saveToBankDepositDb(bankDepositLocalEntity: BankDepositLocalEntity): Flow<Resource<Unit>>
     suspend fun getPaymentDetailById(idTransaction: String): Flow<Resource<PaymentLocalEntity>>
     suspend fun getBankDepositDetail(): Flow<Resource<BankDepositLocalEntity>>

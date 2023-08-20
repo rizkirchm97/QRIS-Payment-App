@@ -74,7 +74,6 @@ fun HomePaymentContentView(
     Box(
         modifier = modifier
             .height(120.dp)
-            .clickable { onTapScanQr() }
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {

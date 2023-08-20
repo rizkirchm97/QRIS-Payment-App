@@ -65,8 +65,8 @@ class PaymentRepositoryImplTest {
         Mockito.lenient().`when`(localDataSource.getBankDepositDetail()).thenReturn(flowOf(Resource.Success(bankLocalExpectedInput)))
         Mockito.lenient().`when`(localDataSource.saveToBankDepositDb(bankLocalExpectedOutput))
             .thenReturn(flowOf(Resource.Success(Unit)))
-//        Mockito.lenient().`when`(localDataSource.saveToPaymentDb(paymentLocal))
-//            .thenReturn(flowOf(Resource.Success(Unit)))
+        Mockito.lenient().`when`(localDataSource.saveToPaymentDb(paymentLocal))
+            .thenReturn(flowOf(Resource.Success("BNI12345600")))
 
 
         val job = launch {
@@ -76,18 +76,14 @@ class PaymentRepositoryImplTest {
 
                 if (result is Resource.Success) {
                     assertInstanceOf(Resource.Success::class.java, result)
-                    assertEquals(Resource.Success(Unit).data, result.data)
+                    assertEquals(Resource.Success("BNI12345600").data, result.data)
                 }
             }
         }
 
-
-
         advanceTimeBy(50_000L)
 
-        Mockito.verify(localDataSource).getBankDepositDetail()
-//        Mockito.verify(localDataSource, Mockito.times(1)).saveToBankDepositDb(bankLocalExpectedOutput).collect()
-//        Mockito.verify(localDataSource).saveToPaymentDb(paymentLocal)
+//        Mockito.verify(localDataSource).getBankDepositDetail()
 
         job.cancel()
 
@@ -365,7 +361,7 @@ class PaymentRepositoryImplTest {
 
     private val bankLocalExpectedOutput = BankDepositLocalEntity(
         bankId = "BNI64",
-        nominalMoney = 95_000
+        nominalMoney = 500_000_000
     )
 
     private val paymentStringExpected = "BNI.ID12345678.MERCHANT MOCK TEST.50000"

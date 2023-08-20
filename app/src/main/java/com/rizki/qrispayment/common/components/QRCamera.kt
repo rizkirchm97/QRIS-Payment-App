@@ -35,7 +35,8 @@ import android.util.Size as CameraSize
 @Composable
 fun QRCamera(
     onSuccess: @Composable (String) -> Unit,
-    onError: @Composable (String) -> Unit
+    onError: @Composable (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     var state by remember {
@@ -114,11 +115,13 @@ fun QRCamera(
             }
 
             previewView
-        }
+        },
+            modifier = Modifier
+                .fillMaxSize()
         )
 
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
         ) {
             DrawSquareOverlay()

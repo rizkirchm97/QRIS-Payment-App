@@ -47,7 +47,7 @@ class SavePaymentUsaCaseTest {
             paymentRepository.savePayment(
                 paymentStringExpected
             )
-        ).thenReturn(flowOf(Resource.Success(Unit)))
+        ).thenReturn(flowOf(Resource.Success("BNI12345600")))
 
         // Act
         val result = savePaymentUsaCase.invoke(

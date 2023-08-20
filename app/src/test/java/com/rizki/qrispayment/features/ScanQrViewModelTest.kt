@@ -60,7 +60,7 @@ class ScanQrViewModelTest {
     fun testShouldReturnSuccess() = runTest {
         // Arrange
         Mockito.`when`(repo.savePayment(paymentStringExpected))
-            .thenReturn(flowOf(Resource.Success(Unit)))
+            .thenReturn(flowOf(Resource.Success("BNI12345600")))
 
         // Act
         viewModel.onEvent(ScanQREvent.SavePayment(paymentStringExpected))
@@ -71,7 +71,7 @@ class ScanQrViewModelTest {
             act.collect {
                 if (it is ScanQrState.Success) {
                     assertInstanceOf(ScanQrState.Success::class.java, it)
-                    assertEquals(Unit, (it).data)
+                    assertEquals("BNI12345600", (it).data)
                 }
 
             }

@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.rizki.qrispayment.common.AppNav
 import com.rizki.qrispayment.common.components.QRCamera
+import com.rizki.qrispayment.common.components.SetStatusBarColor
 import com.rizki.qrispayment.features.home.HomePaymentScreen
 import com.rizki.qrispayment.ui.theme.QRISPaymentTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             QRISPaymentTheme {
+//                SetStatusBarColor(color = Color(0xFFE55300))
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
                 Surface(
