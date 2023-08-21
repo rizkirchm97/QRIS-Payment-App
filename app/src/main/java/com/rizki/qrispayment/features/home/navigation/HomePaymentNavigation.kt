@@ -10,6 +10,10 @@ fun NavController.navigateToQrScan() {
     this.navigate(NavRoute.QrScanScreen.route)
 }
 
+fun NavController.navigateToPaymentHistories() {
+    this.navigate(NavRoute.PaymentHistoryScreen.route)
+}
+
 
 
 fun NavGraphBuilder.homeNavigation(

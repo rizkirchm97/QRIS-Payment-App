@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.rizki.qrispayment.common.components.ApplicationAppbar
 import com.rizki.qrispayment.common.components.CircularProgress
+import com.rizki.qrispayment.common.components.ErrorComponent
 import com.rizki.qrispayment.common.components.QRAlertDialog
 import com.rizki.qrispayment.common.components.QRCamera
 
@@ -34,8 +35,8 @@ internal fun ScanQrScreen(
 
             }
         },
-        failed = { message ->
-
+        failed = { message, modifier ->
+            ErrorComponent(message = message ?: "Unknown Error", modifier = modifier)
         })
 }
 
@@ -46,7 +47,7 @@ fun ScanQrScreen(
     onPopBack: () -> Unit,
     onQRSubmitTap: (String) -> Unit,
     success: @Composable (id: String?, modifier: Modifier) -> Unit,
-    failed: @Composable (message: String) -> Unit,
+    failed: @Composable (message: String, modifier: Modifier) -> Unit,
 ) {
 
     val showDialog = remember { mutableStateOf(false) }
@@ -69,7 +70,7 @@ fun ScanQrScreen(
                 is ScanQrState.Error -> {
                     scanningEnabled.value = true
                     showDialog.value = true
-                    uiState.message?.let { it1 -> failed(it1) }
+                    uiState.message?.let { it1 -> failed(it1, Modifier.fillMaxSize()) }
 
                 }
 
@@ -94,7 +95,7 @@ fun ScanQrScreen(
                 showDialog.value = true
                 scannedString.value = value
             }, onError = {
-                failed("Error")
+                failed("Error", modifier)
                 scanningEnabled.value = true
             })
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rizki.qrispayment.common.components.CircularProgress
+import com.rizki.qrispayment.common.components.ErrorComponent
 import com.rizki.qrispayment.common.components.LabelAndValue
 import com.rizki.qrispayment.common.toCurrencyIDRFormat
 import com.rizki.qrispayment.domain.entities.BankDepositDetailEntity
@@ -48,7 +49,9 @@ internal fun PaymentDetailScreen(
             )
         },
         error = { message ->
-
+            ErrorComponent(
+                message = message ?: "Unknown Error"
+            )
         }
     )
 }

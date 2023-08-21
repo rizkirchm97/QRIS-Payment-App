@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BankDepositDao {
 
-    @Transaction
     @Upsert
     suspend fun upsert(paymentLocalEntity: BankDepositLocalEntity)
 

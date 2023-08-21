@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rizki.qrispayment.common.components.ApplicationAppBar
 import com.rizki.qrispayment.common.components.CircularProgress
+import com.rizki.qrispayment.common.components.ErrorComponent
 import com.rizki.qrispayment.common.toCurrencyIDRFormat
 import com.rizki.qrispayment.domain.entities.BankDepositDetailEntity
 
@@ -51,13 +52,7 @@ internal fun HomePaymentScreen(
             )
         },
         failed = { message ->
-            AlertDialog(
-                onDismissRequest = { },
-                title = { },
-                text = { },
-                confirmButton = { },
-                dismissButton = { }
-            )
+            ErrorComponent(message = message)
         }
     )
 }

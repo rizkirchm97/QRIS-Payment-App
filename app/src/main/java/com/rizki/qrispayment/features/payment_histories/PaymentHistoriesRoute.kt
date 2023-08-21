@@ -15,10 +15,10 @@ fun PaymentHistoriesRoute(
     onPopBack: () -> Unit
 ) {
 
-        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        PaymentHistoriesScreen(
-            uiState = uiState,
-            onPopBack = onPopBack,
-        )
+    PaymentHistoriesScreen(
+        uiState = uiState,
+        onPopBack = onPopBack,
+    )
 }
