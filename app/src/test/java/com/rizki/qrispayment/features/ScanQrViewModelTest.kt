@@ -56,7 +56,7 @@ class ScanQrViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @DisplayName("Should return success when save payment")
+    @DisplayName("Should return success when save payment_detail")
     fun testShouldReturnSuccess() = runTest {
         // Arrange
         Mockito.`when`(repo.savePayment(paymentStringExpected))
@@ -83,7 +83,7 @@ class ScanQrViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @DisplayName("Should return error when save payment")
+    @DisplayName("Should return error when save payment_detail")
     fun testShouldReturnError() = runTest {
 
         // Arrange
@@ -114,7 +114,7 @@ class ScanQrViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @DisplayName("Should return loading when save payment")
+    @DisplayName("Should return loading when save payment_detail")
     fun testShouldReturnLoading() = runTest {
 
         // Arrange

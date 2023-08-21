@@ -39,7 +39,7 @@ class SavePaymentUsaCaseTest {
     }
 
     @Test
-    @DisplayName("Should Get Success From repository and no error while save payment")
+    @DisplayName("Should Get Success From repository and no error while save payment_detail")
     fun testSavePaymentSuccess() = runTest {
 
         // Arrange
@@ -63,10 +63,10 @@ class SavePaymentUsaCaseTest {
     }
 
     @Test
-    @DisplayName("Should Get Error From repository and error while save payment")
+    @DisplayName("Should Get Error From repository and error while save payment_detail")
     fun testSavePaymentError() = runTest {
 
-        val expected = "Error while save payment"
+        val expected = "Error while save payment_detail"
 
         // Arrange
         Mockito.lenient().`when`(

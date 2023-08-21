@@ -63,7 +63,7 @@ internal fun HomePaymentScreen(
 }
 
 @Composable
-fun HomePaymentContentView(
+internal fun HomePaymentContentView(
     data: BankDepositDetailEntity?,
     nominal: String,
     onTapScanQr: () -> Unit,
@@ -177,7 +177,7 @@ internal fun HomePaymentScreen(
 }
 
 @Composable
-fun LoadingScreen(
+internal fun LoadingScreen(
     uiState: HomeUiState,
     loadingComponent: @Composable () -> Unit,
     content: @Composable () -> Unit

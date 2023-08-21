@@ -22,7 +22,7 @@ class ScanQrViewModel @Inject constructor(
 
 
 
-    private val _viewModelState = MutableStateFlow<ScanQrViewModelState>(ScanQrViewModelState(isLoading = true))
+    private val _viewModelState = MutableStateFlow<ScanQrViewModelState>(ScanQrViewModelState(idle = Unit))
     val uiState = _viewModelState
         .map(ScanQrViewModelState::toUiState)
         .stateIn(
@@ -84,13 +84,15 @@ private data class ScanQrViewModelState(
     val isLoading: Boolean = false,
     val success: String? = "",
     val isError: Boolean? = false,
-    val message: String? = null
+    val message: String? = null,
+    val idle: Unit? = null
 ) {
     fun toUiState(): ScanQrState {
         return when {
             isLoading -> ScanQrState.Loading(isLoading)
             success != null -> ScanQrState.Success(success)
             isError == true -> ScanQrState.Error(message)
+            idle != null -> ScanQrState.Idle
             else -> throw IllegalStateException("Invalid state")
         }
     }
@@ -104,4 +106,6 @@ sealed interface ScanQrState {
     data class Loading(val isLoading: Boolean?) : ScanQrState
     data class Success(val data: String?) : ScanQrState
     data class Error(val message: String?) : ScanQrState
+
+    object Idle : ScanQrState
 }

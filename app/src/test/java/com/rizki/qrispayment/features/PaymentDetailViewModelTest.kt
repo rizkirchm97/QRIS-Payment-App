@@ -8,10 +8,9 @@ import com.rizki.qrispayment.domain.entities.PaymentDetailEntity
 import com.rizki.qrispayment.domain.repositories.PaymentRepository
 import com.rizki.qrispayment.domain.usecases.GetLatestBankDepositUseCase
 import com.rizki.qrispayment.domain.usecases.GetPaymentDetailByIdUseCase
-import com.rizki.qrispayment.domain.usecases.SavePaymentUseCase
-import com.rizki.qrispayment.features.payment.PaymentDataHolder
-import com.rizki.qrispayment.features.payment.PaymentUiState
-import com.rizki.qrispayment.features.payment.PaymentViewModel
+import com.rizki.qrispayment.features.payment_detail.PaymentDataHolder
+import com.rizki.qrispayment.features.payment_detail.PaymentUiState
+import com.rizki.qrispayment.features.payment_detail.PaymentDetailViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 @Extensions(
     value = [ExtendWith(MockitoExtension::class), ExtendWith(MainDispatcherRule::class)]
 )
-class PaymentViewModelTest {
+class PaymentDetailViewModelTest {
 
     @Mock
     private lateinit var repo: PaymentRepository
@@ -42,14 +41,14 @@ class PaymentViewModelTest {
     private lateinit var bankUseCase: GetLatestBankDepositUseCase
 
 
-    private lateinit var viewModel: PaymentViewModel
+    private lateinit var viewModel: PaymentDetailViewModel
 
     @BeforeEach
     fun beforeEach() {
         savedStateHandle = mock(SavedStateHandle::class.java)
         paymentUseCase = GetPaymentDetailByIdUseCase(repo)
         bankUseCase = GetLatestBankDepositUseCase(repo)
-        viewModel = PaymentViewModel(paymentUseCase, bankUseCase, savedStateHandle)
+        viewModel = PaymentDetailViewModel(paymentUseCase, bankUseCase, savedStateHandle)
     }
 
     @Test

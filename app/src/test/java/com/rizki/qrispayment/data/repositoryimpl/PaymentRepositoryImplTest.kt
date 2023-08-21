@@ -126,7 +126,7 @@ class PaymentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should Get Success From localDataSource when get payment detail by id")
+    @DisplayName("Should Get Success From localDataSource when get payment_detail detail by id")
     fun testGetPaymentDetailByIdSuccess() = runTest {
 
         // Arrange
@@ -153,10 +153,10 @@ class PaymentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should Get Error From localDataSource when get payment detail by id")
+    @DisplayName("Should Get Error From localDataSource when get payment_detail detail by id")
     fun testGetPaymentDetailByIdError() = runTest {
 
-        val expected = Exception("Error when get payment detail by id")
+        val expected = Exception("Error when get payment_detail detail by id")
 
         // Arrange
         Mockito.lenient().`when`(localDataSource.getPaymentDetailById(paymentLocalExpectedInput.id))
@@ -182,7 +182,7 @@ class PaymentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should Get Success when clear all data payment")
+    @DisplayName("Should Get Success when clear all data payment_detail")
     fun testClearAllDataSuccess() = runTest {
 
         // Arrange
@@ -208,10 +208,10 @@ class PaymentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should Get Error when clear all data payment")
+    @DisplayName("Should Get Error when clear all data payment_detail")
     fun testClearAllDataError() = runTest {
 
-        val expected = Exception("Error when clear all data payment")
+        val expected = Exception("Error when clear all data payment_detail")
 
         // Arrange
         Mockito.lenient().`when`(localDataSource.clearPaymentDetail()).thenReturn(flowOf(Resource.Error(expected.message.toString())))
@@ -265,7 +265,7 @@ class PaymentRepositoryImplTest {
     @DisplayName("Should Get Error when getAllPayment")
     fun testGetAllPaymentError() = runTest {
 
-        val expected = Exception("Error when get all payment")
+        val expected = Exception("Error when get all payment_detail")
 
         // Arrange
         Mockito.lenient().`when`(localDataSource.getAllPaymentDetail()).thenReturn(flowOf(Resource.Error(expected.message.toString())))

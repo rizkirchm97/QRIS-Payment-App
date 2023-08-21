@@ -5,6 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.rizki.qrispayment.features.home.navigation.homeNavigation
 import com.rizki.qrispayment.features.home.navigation.navigateToQrScan
+import com.rizki.qrispayment.features.payment_detail.navigation.navigateToHome
+import com.rizki.qrispayment.features.payment_detail.navigation.paymentNavigation
+import com.rizki.qrispayment.features.scan_qr.navigation.navigateToPaymentDetail
 import com.rizki.qrispayment.features.scan_qr.navigation.scanQrNavigation
 
 @Composable
@@ -26,8 +29,14 @@ fun AppNav(
                 navController.popBackStack()
             },
             onNavigateToPayment = { scannedValue ->
-
+                navController.navigateToPaymentDetail(paymentId = scannedValue)
             }
         )
+
+        paymentNavigation {
+
+            navController.navigateToHome()
+
+        }
     }
 }

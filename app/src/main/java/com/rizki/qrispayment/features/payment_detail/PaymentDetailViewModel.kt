@@ -1,4 +1,4 @@
-package com.rizki.qrispayment.features.payment
+package com.rizki.qrispayment.features.payment_detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,20 +12,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 @HiltViewModel
-class PaymentViewModel @Inject constructor(
+class PaymentDetailViewModel @Inject constructor(
     getPaymentDetailByIdUseCase: GetPaymentDetailByIdUseCase,
     getLatestBankDepositUseCase: GetLatestBankDepositUseCase,
     savedStateHandle: SavedStateHandle
-) : ViewModel(
-
-) {
+) : ViewModel() {
 
 
 
@@ -45,7 +43,7 @@ class PaymentViewModel @Inject constructor(
         savedStateHandle: SavedStateHandle
     ): Flow<PaymentUiState> = flow {
 
-        val idTransaction: String? = savedStateHandle.get<String>("idTransaction")
+        val idTransaction: String? = savedStateHandle.get<String>("paymentId")
 
         if (idTransaction.isNullOrBlank()) {
             emit(PaymentUiState.Loading(isLoading = false))
@@ -77,7 +75,7 @@ class PaymentViewModel @Inject constructor(
                 }
 
 
-            }
+            }.collect()
 
     }
 

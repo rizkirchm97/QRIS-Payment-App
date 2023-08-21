@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import com.rizki.qrispayment.common.utils.QrCodeAnalyzer
 import com.rizki.qrispayment.common.utils.QrCodeAnalyzerState
 import android.util.Size as CameraSize
@@ -34,6 +35,7 @@ import android.util.Size as CameraSize
 
 @Composable
 fun QRCamera(
+    isEnabled: Boolean,
     onSuccess: @Composable (String) -> Unit,
     onError: @Composable (String) -> Unit,
     modifier: Modifier = Modifier
@@ -49,6 +51,9 @@ fun QRCamera(
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(context)
     }
+
+    var previousLifecycle: Lifecycle? by remember { mutableStateOf(null) }
+
     var hasCameraPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -72,7 +77,7 @@ fun QRCamera(
 
     }
 
-    if (hasCameraPermission) {
+    if (hasCameraPermission && isEnabled) {
 
         AndroidView(factory = { ctx ->
             val previewView = PreviewView(ctx)
@@ -104,6 +109,12 @@ fun QRCamera(
             )
 
             try {
+
+                previousLifecycle?.let {
+                    cameraProviderFuture.get().unbind(preview)
+                }
+                previousLifecycle = lifecycleOwner.lifecycle
+
                 cameraProviderFuture.get().bindToLifecycle(
                     lifecycleOwner,
                     selector,

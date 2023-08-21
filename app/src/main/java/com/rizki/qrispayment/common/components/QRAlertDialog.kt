@@ -29,7 +29,6 @@ fun QRAlertDialog(
     onConfirm: () -> Unit
 ) {
 
-
     val splitedMessage = message?.splitQrCode()
 
     AlertDialog(
@@ -59,7 +58,10 @@ fun QRAlertDialog(
                 if (message != null) {
                     LabelAndValue("TRANSACTION ID", splitedMessage?.get(1) ?: "No Data")
                     LabelAndValue("MERCHANT NAME", splitedMessage?.get(2) ?: "No Data")
-                    LabelAndValue("AMOUNT", splitedMessage?.get(3)?.toLong()?.toCurrencyIDRFormat() ?: "No Data")
+                    LabelAndValue(
+                        "AMOUNT",
+                        splitedMessage?.get(3)?.toLong()?.toCurrencyIDRFormat() ?: "No Data"
+                    )
                 } else {
                     LabelAndValue("Transaction Id", "No Data")
                     LabelAndValue("Merchant Name", "No Data")
@@ -67,23 +69,14 @@ fun QRAlertDialog(
                 }
 
 
-
-
-
             }
 
 
         }
     )
+
+
 }
-@Composable
-fun LabelAndValue(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth(0.5f))
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = value, fontSize = 16.sp)
-    }
-}
+
+
+

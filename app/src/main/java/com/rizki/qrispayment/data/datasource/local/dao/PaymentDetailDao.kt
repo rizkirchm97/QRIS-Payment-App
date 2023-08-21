@@ -22,8 +22,8 @@ interface PaymentDetailDao {
     @Insert
     suspend fun insert(paymentLocalEntity: PaymentLocalEntity)
 
-    @Query("SELECT * FROM PaymentDetail WHERE idTransaction = :idTransaction")
-    fun getPaymentDetail(idTransaction: String): Flow<PaymentLocalEntity>
+    @Query("SELECT * FROM PaymentDetail WHERE id = :id")
+    fun getPaymentDetail(id: String): Flow<PaymentLocalEntity>
 
     @Query("DELETE FROM PaymentDetail")
     suspend fun clearPaymentDetail()

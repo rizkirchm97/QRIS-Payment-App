@@ -28,7 +28,7 @@ class LocalDataSourceImpl @Inject constructor(
             try {
                 db.paymentDao.insert(paymentLocalEntity)
                 emit(Resource.Success(paymentLocalEntity.id))
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 emit(Resource.Error(e.message.toString()))
             }
 
@@ -49,7 +49,7 @@ class LocalDataSourceImpl @Inject constructor(
         }
 
     override suspend fun getPaymentDetailById(idTransaction: String): Flow<Resource<PaymentLocalEntity>> =
-        flow {
+        flow<Resource<PaymentLocalEntity>> {
 
             val paymentDetail = db.paymentDao.getPaymentDetail(idTransaction)
             paymentDetail
@@ -62,10 +62,10 @@ class LocalDataSourceImpl @Inject constructor(
                 }
 
 
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun getBankDepositDetail(): Flow<Resource<BankDepositLocalEntity>> =
-        flow {
+        flow<Resource<BankDepositLocalEntity>> {
             val bankDepositDetail = db.bankDepositDao.getLatestBankDeposit()
             bankDepositDetail
                 .catch { e ->
@@ -74,7 +74,7 @@ class LocalDataSourceImpl @Inject constructor(
                 .collect { result ->
                     emit(Resource.Success(result))
                 }
-        }
+        }.flowOn(Dispatchers.IO)
 
     override suspend fun clearPaymentDetail(): Flow<Resource<Unit>> = flow {
 
